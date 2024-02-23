@@ -4,12 +4,17 @@ interface Props {
   onClick: any;
   children: ReactNode;
   type: "submit" | "reset" | "button";
+  className: String;
 }
 
-function Button({ onClick, children, type }: Props) {
+function Button({ onClick, children, type, className }: Props) {
   return (
     <>
-      <button type={type} onClick={onClick}>
+      <button
+        type={type}
+        onClick={onClick}
+        className={"rounded-md hover:bg-opacity-50 " + className}
+      >
         {children}
       </button>
     </>

@@ -59,15 +59,17 @@ export default function Home() {
 
   return (
     <>
-      <div className="w-full h-full py-10 flex flex-col items-center  font-sans ">
+      <div className="w-full h-full py-10 flex flex-col items-center font-sans ">
         <h1 className="text-4xl">ToDo App</h1>
         <div className="w-3/4 md:w-1/2 lg:w-1/3 h-auto p-2 m-2 border rounded-sm flex flex-col">
           {tasks.length != 0 ? (
             tasks.map((doc) => (
-              <DropDown dropDownContent={doc.description}>
-                <ListItem key={doc._id} id={doc._id}>
-                  {doc.name}
-                </ListItem>
+              <div className="w-full flex justify-between">
+                <DropDown dropDownContent={doc.description}>
+                  <ListItem key={doc._id} id={doc._id}>
+                    {doc.name}
+                  </ListItem>
+                </DropDown>
                 <div className="flex gap-1">
                   {doc.completed ? (
                     <Button
@@ -82,6 +84,7 @@ export default function Home() {
                         getTodos();
                       }}
                       type={"button"}
+                      className="bg-gray-50"
                     >
                       <Image src={checksvg} alt="mark task as completed" />
                     </Button>
@@ -98,12 +101,14 @@ export default function Home() {
                         getTodos();
                       }}
                       type={"button"}
+                      className="bg-gray-50"
                     >
                       <Image src={crosssvg} alt="mark task as not completed" />
                     </Button>
                   )}
                   <Button
                     type="button"
+                    className="bg-red-500 text-white p-1"
                     onClick={async () => {
                       await fetch("http://localhost:3000/api/todos", {
                         method: "DELETE",
@@ -117,7 +122,7 @@ export default function Home() {
                     Delete
                   </Button>
                 </div>
-              </DropDown>
+              </div>
             ))
           ) : (
             <span className="w-full flex justify-center">
@@ -127,7 +132,10 @@ export default function Home() {
         </div>
         <div className="w-3/4 md:w-1/2 lg:w-1/3 p-1 flex flex-col border rounded-sm">
           <span className="flex gap-1 justify-between">
-            <label htmlFor="task-input" className="w-1/4 p-1">
+            <label
+              htmlFor="task-input"
+              className="w-1/4 p-1 text-xs md:text-sm"
+            >
               Task Name
             </label>
             <input
@@ -141,7 +149,7 @@ export default function Home() {
             />
           </span>
           <span className="flex gap-1 justify-between">
-            <label htmlFor="task-input" className="w-1/4">
+            <label htmlFor="task-input" className="w-1/4 text-xs md:text-sm">
               Task Description
             </label>
             <textarea
@@ -157,9 +165,16 @@ export default function Home() {
             />
           </span>
 
-          <Button type="submit" onClick={addTask}>
+          <Button
+            type="submit"
+            onClick={addTask}
+            className="w-1/4 m-3 self-center text-white bg-blue-500"
+          >
             Submit
           </Button>
+        </div>
+        <div className="w-3/4 md:w-1/2 lg:w-1/3 p-1 border">
+          <p>NOTE: click on the name of your task for more details</p>
         </div>
       </div>
     </>

@@ -30,7 +30,7 @@ function DropDown({ children, dropDownContent }: Props) {
       ref={dropDownRef}
       className=""
     >
-      <div className="w-full flex justify-between">{children}</div>
+      <div>{children}</div>
       <div
         className={`w-full transition-all + ${isOpen ? "show" : "hide hidden"}`}
       >
