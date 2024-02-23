@@ -1,9 +1,16 @@
 "use client";
 import { Todo } from "@/model/todos";
+
 import { useEffect, useRef, useState } from "react";
+
 import Button from "./component/Button";
 import ListItem from "./component/ListItem";
 import DropDown from "./component/DropDown";
+
+import Image from "next/image";
+
+import checksvg from "../public/check.svg";
+import crosssvg from "../public/cross-svgrepo-com.svg";
 
 export default function Home() {
   const [tasks, setTasks] = useState<Todo[]>([]);
@@ -29,18 +36,15 @@ export default function Home() {
   const addTask = async () => {
     //note: body needs to be stringify, parse back to json at the api level
     try {
-      const task = {
-        name: newTask.name,
-        description: newTask.description,
-        completed: false,
-      };
+      const task = newTask;
       await fetch("http://localhost:3000/api/todos", {
         method: "POST",
         body: JSON.stringify(task),
       });
+      console.log(task);
 
       getTodos();
-      setNewTask({ name: "", description: "", completed: false } as Todo);
+      setNewTask({ ...newTask, name: "", description: "" } as Todo);
 
       //changes value of input back to ""
       const allInputs = document.querySelectorAll(".inputFields");
@@ -64,18 +68,55 @@ export default function Home() {
                 <ListItem key={doc._id} id={doc._id}>
                   {doc.name}
                 </ListItem>
-                <Button
-                  type="button"
-                  onClick={async () => {
-                    await fetch("http://localhost:3000/api/todos", {
-                      method: "DELETE",
-                      body: JSON.stringify({ id: doc._id }),
-                    });
-                    getTodos();
-                  }}
-                >
-                  Delete
-                </Button>
+                <div className="flex gap-1">
+                  {doc.completed ? (
+                    <Button
+                      onClick={async () => {
+                        await fetch("http://localhost:3000/api/todos", {
+                          method: "PUT",
+                          body: JSON.stringify({
+                            id: doc._id,
+                            compeleted: false,
+                          }),
+                        });
+                        getTodos();
+                      }}
+                      type={"button"}
+                    >
+                      <Image src={checksvg} alt="mark task as completed" />
+                    </Button>
+                  ) : (
+                    <Button
+                      onClick={async () => {
+                        await fetch("http://localhost:3000/api/todos", {
+                          method: "PUT",
+                          body: JSON.stringify({
+                            id: doc._id,
+                            compeleted: true,
+                          }),
+                        });
+                        getTodos();
+                      }}
+                      type={"button"}
+                    >
+                      <Image src={crosssvg} alt="mark task as not completed" />
+                    </Button>
+                  )}
+                  <Button
+                    type="button"
+                    onClick={async () => {
+                      await fetch("http://localhost:3000/api/todos", {
+                        method: "DELETE",
+                        body: JSON.stringify({
+                          id: doc._id,
+                        }),
+                      });
+                      getTodos();
+                    }}
+                  >
+                    Delete
+                  </Button>
+                </div>
               </DropDown>
             ))
           ) : (
